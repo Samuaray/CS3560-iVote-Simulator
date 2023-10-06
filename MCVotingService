@@ -1,0 +1,44 @@
+import java.util.Arrays;
+import java.util.List;
+
+public class MCVotingService extends VotingService {
+
+    // Override the method to submit answers for multiple-choice questions
+    public void submitMCAnswers(Student student) {
+        String[] mNewAnswer = student.getmAnswer();
+
+        // Check if student has answered before using StudentID and MCAnswers as the key-value pair
+        String key = student.getStudentID() + Arrays.toString(mNewAnswer);
+        if (studentAnswers.containsKey(key)) {
+            String[] oldAnswer = student.getmAnswer();
+
+            // If previous answer was right, decrement the right counter
+            if (isMCAnswerRight(oldAnswer)) {
+                right--;
+            } else {
+                wrong--;
+            }
+        }
+
+        // Update student's answer in the map
+        studentAnswers.put(key, Arrays.toString(mNewAnswer));
+
+        // Check new answer
+        if (isMCAnswerRight(mNewAnswer)) {
+            right++;
+        } else {
+            wrong++;
+        }
+    }
+
+    // Helper method to check if the multiple-choice answer is correct
+    private boolean isMCAnswerRight(String[] mAnswer) {
+        if (question instanceof MCQuestion) {
+            List<String> correctAnswers = Arrays.asList(((MCQuestion) question).getAnswers());
+            List<String> studentAnswers = Arrays.asList(mAnswer);
+            
+            return correctAnswers.containsAll(studentAnswers) && studentAnswers.containsAll(correctAnswers);
+        }
+        return false; // This method shouldn't be called for non-MCQuestions, but just in case
+    }
+}
