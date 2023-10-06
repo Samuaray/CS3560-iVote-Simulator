@@ -1,6 +1,8 @@
-import java.util.Arrays;
-
 public class SimulationDriver {
+    /**
+     * The main driver that triggers the whole process.
+     * @param args Not used in this simulation.
+     */
     public static void main(String[] args) {
         
         VotingService votingService = new VotingService();
